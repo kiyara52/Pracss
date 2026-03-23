@@ -1,0 +1,228 @@
+Got it — I’ll compile **ALL your practical codes (1–5 from your PDF)** into **one clean code base**, with proper spacing so you can copy easily, plus **Git Bash + Maven commands** at the end.
+
+(I extracted these from your uploaded file  — especially pages 12–23 for pipelines.)
+
+---
+
+# ✅ ✅ FULL COMPILED CODE BASE (ALL PRACTICALS)
+
+---
+
+## 🔹 PRACTICAL 3A – Basic Jenkins Pipeline
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
+```
+
+---
+
+## 🔹 PRACTICAL 3B – Build & Test Pipeline
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/krishaaairmun-debug/devops'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Running build steps...."
+                bat 'dir'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running test..."
+                bat 'echo Tests passed successfully'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "pipeline completed successfully"
+        }
+        failure {
+            echo "pipeline failure"
+        }
+    }
+}
+```
+
+---
+
+## 🔹 PRACTICAL 4B – Parameterized + Scheduled Pipeline
+
+```groovy
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'USERNAME', defaultValue: 'Student', description: 'Enter your name')
+    }
+
+    triggers {
+        cron('H/2 * * * *') // runs every 2 minutes
+    }
+
+    stages {
+
+        stage('Greeting') {
+            steps {
+                echo "Hello, ${params.USERNAME}!"
+                bat "echo Hello ${params.USERNAME}! This is your scheduled Jenkins job! > message.txt"
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'message.txt'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Build completed successfully!"
+        }
+    }
+}
+```
+
+---
+
+## 🔹 PRACTICAL 5A – Maven Build Pipeline (IMPORTANT)
+
+```groovy
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'   // Make sure Maven is configured in Jenkins
+    }
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                git 'https://github.com/your-repo/maven-project.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Maven build successful!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}
+```
+
+---
+
+# 💻 GIT BASH COMMANDS (IMPORTANT FOR EXAM)
+
+## 🔹 Clone Repo
+
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+```
+
+---
+
+## 🔹 Add File + Commit + Push
+
+```bash
+git add .
+git commit -m "Initial commit"
+git push origin main
+```
+
+---
+
+## 🔹 Check Status
+
+```bash
+git status
+```
+
+---
+
+## 🔹 Pull Latest Code
+
+```bash
+git pull origin main
+```
+
+---
+
+# ☕ MAVEN COMMANDS (VERY IMPORTANT)
+
+## 🔹 Compile Project
+
+```bash
+mvn compile
+```
+
+## 🔹 Run Tests
+
+```bash
+mvn test
+```
+
+## 🔹 Package (create .jar/.war)
+
+```bash
+mvn package
+```
+
+## 🔹 Clean Project
+
+```bash
+mvn clean
+```
+
+## 🔹 Full Build Lifecycle
+
+```bash
+mvn clean install
+```
